@@ -1,0 +1,20 @@
+name: Automatic Deploy Workflow
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: appleboy/ssh-action@master
+      with:
+        host: host.url
+        username: desenvolvimento
+        password: mntufpa2011
+        key: ${{ secrets.SECRET_KEY }}
+        port: 22
+        script: |
+          git status

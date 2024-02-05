@@ -1,0 +1,17 @@
+name: Greet-new-contributor
+
+on:
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  greet-new-contributor:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/first-interaction@v1
+      with:
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        issue-message: '# Não se esqueça de dar assign em algum dos mantenedores do sistema.\n Além disso, esclareça bem o problema e potenciais soluções.'
+        pr-message: 'Parabéns pelo seu primeiro PR no NMTSisLab! Certifique-se de ler o readme.md disposto na página principal do repositório.
+                     Certifique-se também de que o PR passou pelos testes especificados. Caso necessário, atualize-os.'
