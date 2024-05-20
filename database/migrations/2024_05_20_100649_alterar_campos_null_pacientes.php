@@ -15,7 +15,7 @@ class AlterarCamposNullPacientes extends Migration
     {
         Schema::table('patients', function (Blueprint $table) {
             // Altera a coluna para aceitar valores nulos
-            $table->string('name')->nullable()->change();
+            $table->string('name')->nullable(false)->change();
             $table->date('birthday')->nullable()->change();
             $table->string('email')->nullable()->change();
             $table->string('phone')->nullable()->change();

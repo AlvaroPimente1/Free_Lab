@@ -54,7 +54,7 @@
                             <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-mail') }}</label>
 
                             <div class="col-md-6">
-                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ $patient->email }}" required autocomplete="email">
+                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ $patient->email }}" autocomplete="email">
 
                                 @error('email')
                                     <span class="invalid-feedback" role="alert">
@@ -68,7 +68,7 @@
                             <label for="phone" class="col-md-4 col-form-label text-md-right">{{ __('Telefone') }}</label>
 
                             <div class="col-md-6">
-                                <input id="phone" type="text" class="form-control @error('phone') is-invalid @enderror" name="phone" value="{{ $patient->phone }}" required autocomplete="phone">
+                                <input id="phone" type="text" class="form-control @error('phone') is-invalid @enderror" name="phone" value="{{ $patient->phone }}" autocomplete="phone">
 
                                 @error('phone')
                                     <span class="invalid-feedback" role="alert">
@@ -82,7 +82,7 @@
                             <label for="profession" class="col-md-4 col-form-label text-md-right">{{ __('Profissão') }}</label>
 
                             <div class="col-md-6">
-                                <input id="profession" type="text" class="form-control @error('profession') is-invalid @enderror" name="profession" value="{{ $patient->profession }}" required autocomplete="profession" autofocus>
+                                <input id="profession" type="text" class="form-control @error('profession') is-invalid @enderror" name="profession" value="{{ $patient->profession }}" autocomplete="profession" autofocus>
 
                                 @error('profession')
                                     <span class="invalid-feedback" role="alert">
@@ -96,7 +96,7 @@
                             <label for="birthday" class="col-md-4 col-form-label text-md-right">{{ __('Aniversário') }}</label>
 
                             <div class="col-md-6">
-                                <input id="birthday" type="date" class="form-control @error('birthday') is-invalid @enderror" name="birthday" value="{{ $patient->birthday }}" required autocomplete="birthday" autofocus>
+                                <input id="birthday" type="date" class="form-control @error('birthday') is-invalid @enderror" name="birthday" value="{{ $patient->birthday }}" autocomplete="birthday" autofocus>
 
                                 @error('birthday')
                                     <span class="invalid-feedback" role="alert">
@@ -110,7 +110,7 @@
                             <label for="height" class="col-md-4 col-form-label text-md-right">{{ __('Altura (em cm)') }}</label>
 
                             <div class="col-md-6">
-                                <input id="height" type="float" class="form-control @error('height') is-invalid @enderror" name="height" value="{{ $patient->height }}" required autocomplete="height" autofocus>
+                                <input id="height" type="float" class="form-control @error('height') is-invalid @enderror" name="height" value="{{ $patient->height }}" autocomplete="height" autofocus>
 
                                 @error('height')
                                     <span class="invalid-feedback" role="alert">
@@ -124,7 +124,7 @@
                             <label for="weight" class="col-md-4 col-form-label text-md-right">{{ __('Peso (em kg)') }}</label>
 
                             <div class="col-md-6">
-                                <input id="weight" type="float" class="form-control @error('weight') is-invalid @enderror" name="weight" value="{{ $patient->weight }}" required autocomplete="weight" autofocus>
+                                <input id="weight" type="float" class="form-control @error('weight') is-invalid @enderror" name="weight" value="{{ $patient->weight }}" autocomplete="weight" autofocus>
 
                                 @error('weight')
                                     <span class="invalid-feedback" role="alert">
@@ -138,7 +138,7 @@
                             <label for="address" class="col-md-4 col-form-label text-md-right">{{ __('Endereço') }}</label>
 
                             <div class="col-md-6">
-                                <input id="address" type="text" class="form-control @error('address') is-invalid @enderror" name="address" value="{{ $patient->address }}" required autocomplete="address" autofocus>
+                                <input id="address" type="text" class="form-control @error('address') is-invalid @enderror" name="address" value="{{ $patient->address }}" autocomplete="address" autofocus>
 
                                 @error('address')
                                     <span class="invalid-feedback" role="alert">
@@ -152,7 +152,7 @@
                             <label for="cep" class="col-md-4 col-form-label text-md-right">{{ __('CEP') }}</label>
 
                             <div class="col-md-6">
-                                <input id="cep" type="text" class="form-control @error('cep') is-invalid @enderror" name="cep" value="{{ $patient->cep }}" required autocomplete="cep" autofocus>
+                                <input id="cep" type="text" class="form-control @error('cep') is-invalid @enderror" name="cep" value="{{ $patient->cep }}" autocomplete="cep" autofocus>
 
                                 @error('cep')
                                     <span class="invalid-feedback" role="alert">
@@ -166,7 +166,7 @@
                             <label for="neighborhood" class="col-md-4 col-form-label text-md-right">{{ __('Bairro') }}</label>
 
                             <div class="col-md-6">
-                                <input id="neighborhood" type="text" class="form-control @error('neighborhood') is-invalid @enderror" name="neighborhood" value="{{ $patient->neighborhood }}" required autocomplete="neighborhood" autofocus>
+                                <input id="neighborhood" type="text" class="form-control @error('neighborhood') is-invalid @enderror" name="neighborhood" value="{{ $patient->neighborhood }}" autocomplete="neighborhood" autofocus>
 
                                 @error('neighborhood')
                                     <span class="invalid-feedback" role="alert">
