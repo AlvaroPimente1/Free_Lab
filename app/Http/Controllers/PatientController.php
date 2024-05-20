@@ -140,19 +140,19 @@ class PatientController extends Controller
     {
         return request()->validate([
             'name'          => 'required',
-            'birthday'      => 'required',
-            'email'         => ['nullable', 'email'],
-            'phone'         => ['nullable', 'digits_between:9,11'], // 9 para números sem DDD, 11 para números com DDD
-            'profession'    => 'required',
-            'birthday'      => ['required', 'date'],
-            'height'        => ['required', 'integer'],
-            'weight'        => ['required', 'integer'],
-            'address'       => 'required',
-            'cpf'           => 'required',
-            'cep'           => 'required',
-            'neighborhood'  => 'required',
-            'state'         => ['required', 'max:2'],
-            'extras'        => ['nullable', 'max:255'],
+            'birthday'      => 'nullable|date',
+            'email'         => 'nullable|email',
+            'phone'         => 'nullable|digits_between:9,11', // 9 para números sem DDD, 11 para números com DDD
+            'profession'    => 'nullable',
+            'birthday'      => 'nullable|date',
+            'height'        => 'nullable|integer',
+            'weight'        => 'nullable|integer',
+            'address'       => 'nullable',
+            'cpf'           => 'nullable',
+            'cep'           => 'nullable',
+            'neighborhood'  => 'nullable',
+            'state'         => 'nullable|max:2',
+            'extras'        => 'nullable|max:255',
         ]);
-    }
+    }    
 }

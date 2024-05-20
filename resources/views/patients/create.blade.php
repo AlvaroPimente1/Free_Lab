@@ -64,10 +64,10 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="phone" class="col-md-4 col-form-label text-md-right">{{ __('*Telefone') }}</label>
+                            <label for="phone" class="col-md-4 col-form-label text-md-right">{{ __('Telefone') }}</label>
 
                             <div class="col-md-6">
-                                <input id="phone" type="text" class="form-control @error('phone') is-invalid @enderror" name="phone" value="{{ old('phone') }}" required autocomplete="phone">
+                                <input id="phone" type="text" class="form-control @error('phone') is-invalid @enderror" name="phone" value="{{ old('phone') }}" autocomplete="phone">
 
                                 @error('phone')
                                     <span class="invalid-feedback" role="alert">
@@ -78,10 +78,10 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="profession" class="col-md-4 col-form-label text-md-right">{{ __('*Profissão') }}</label>
+                            <label for="profession" class="col-md-4 col-form-label text-md-right">{{ __('Profissão') }}</label>
 
                             <div class="col-md-6">
-                                <input id="profession" type="text" class="form-control @error('profession') is-invalid @enderror" name="profession" value="{{ old('profession') }}" required autocomplete="profession" autofocus>
+                                <input id="profession" type="text" class="form-control @error('profession') is-invalid @enderror" name="profession" value="{{ old('profession') }}" autocomplete="profession" autofocus>
 
                                 @error('profession')
                                     <span class="invalid-feedback" role="alert">
@@ -92,10 +92,10 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="birthday" class="col-md-4 col-form-label text-md-right">{{ __('*Aniversário') }}</label>
+                            <label for="birthday" class="col-md-4 col-form-label text-md-right">{{ __('Aniversário') }}</label>
 
                             <div class="col-md-6">
-                                <input id="birthday" type="date" class="form-control @error('birthday') is-invalid @enderror" name="birthday" value="{{ old('birthday') }}" required autocomplete="birthday" autofocus>
+                                <input id="birthday" type="date" class="form-control @error('birthday') is-invalid @enderror" name="birthday" value="{{ old('birthday') }}" autocomplete="birthday" autofocus>
 
                                 @error('birthday')
                                     <span class="invalid-feedback" role="alert">
@@ -106,10 +106,10 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="height" class="col-md-4 col-form-label text-md-right">{{ __('*Altura (em metros)') }}</label>
+                            <label for="height" class="col-md-4 col-form-label text-md-right">{{ __('Altura (em metros)') }}</label>
 
                             <div class="col-md-6">
-                                <input id="height" type="float" class="form-control @error('height') is-invalid @enderror" name="height" value="{{ old('height') }}" required autocomplete="height" autofocus>
+                                <input id="height" type="float" class="form-control @error('height') is-invalid @enderror" name="height" value="{{ old('height') }}" autocomplete="height" autofocus>
 
                                 @error('height')
                                     <span class="invalid-feedback" role="alert">
@@ -120,10 +120,10 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="weight" class="col-md-4 col-form-label text-md-right">{{ __('*Peso (em kg)') }}</label>
+                            <label for="weight" class="col-md-4 col-form-label text-md-right">{{ __('Peso (em kg)') }}</label>
 
                             <div class="col-md-6">
-                                <input id="weight" type="float" class="form-control @error('weight') is-invalid @enderror" name="weight" value="{{ old('weight') }}" required autocomplete="weight" autofocus>
+                                <input id="weight" type="float" class="form-control @error('weight') is-invalid @enderror" name="weight" value="{{ old('weight') }}" autocomplete="weight" autofocus>
 
                                 @error('weight')
                                     <span class="invalid-feedback" role="alert">
@@ -134,10 +134,10 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="address" class="col-md-4 col-form-label text-md-right">{{ __('*Endereço') }}</label>
+                            <label for="address" class="col-md-4 col-form-label text-md-right">{{ __('Endereço') }}</label>
 
                             <div class="col-md-6">
-                                <input id="address" type="text" class="form-control @error('address') is-invalid @enderror" name="address" value="{{ old('address') }}" required autocomplete="address" autofocus>
+                                <input id="address" type="text" class="form-control @error('address') is-invalid @enderror" name="address" value="{{ old('address') }}" autocomplete="address" autofocus>
 
                                 @error('address')
                                     <span class="invalid-feedback" role="alert">
@@ -148,10 +148,10 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="cep" class="col-md-4 col-form-label text-md-right">{{ __('*CEP') }}</label>
+                            <label for="cep" class="col-md-4 col-form-label text-md-right">{{ __('CEP') }}</label>
 
                             <div class="col-md-6">
-                                <input id="cep" type="text" class="form-control @error('cep') is-invalid @enderror" name="cep" value="{{ old('cep') }}" required autocomplete="cep" autofocus>
+                                <input id="cep" type="text" class="form-control @error('cep') is-invalid @enderror" name="cep" value="{{ old('cep') }}" autocomplete="cep" autofocus>
 
                                 @error('cep')
                                     <span class="invalid-feedback" role="alert">
@@ -162,10 +162,10 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="neighborhood" class="col-md-4 col-form-label text-md-right">{{ __('*Bairro') }}</label>
+                            <label for="neighborhood" class="col-md-4 col-form-label text-md-right">{{ __('Bairro') }}</label>
 
                             <div class="col-md-6">
-                                <input id="neighborhood" type="text" class="form-control @error('neighborhood') is-invalid @enderror" name="neighborhood" value="{{ old('neighborhood') }}" required autocomplete="neighborhood" autofocus>
+                                <input id="neighborhood" type="text" class="form-control @error('neighborhood') is-invalid @enderror" name="neighborhood" value="{{ old('neighborhood') }}" autocomplete="neighborhood" autofocus>
 
                                 @error('neighborhood')
                                     <span class="invalid-feedback" role="alert">
@@ -176,9 +176,9 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="state" class="col-md-4 col-form-label text-md-right">{{ __('*Estado') }}</label>
+                            <label for="state" class="col-md-4 col-form-label text-md-right">{{ __('Estado') }}</label>
                             <div class="col-md-6">
-                                <select class="form-control @error('state') is-invalid @enderror" id="state" name="state" required>
+                                <select class="form-control @error('state') is-invalid @enderror" id="state" name="state">
                                     <option>Selecione</option>
                                     <option value="AC">AC</option>
                                     <option value="AL">AL</option>
