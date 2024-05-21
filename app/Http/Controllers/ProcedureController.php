@@ -145,7 +145,7 @@ class ProcedureController extends Controller
     public function validateProcedure()
     {
         return request()->validate([
-            'name'          => ['required', 'max:20'],
+            'name'          => ['required', 'max:100'],
             'mnemonic'      => ['required', 'max:5'],
             'method'        => ['required'],
             'fields'        => ['present', 'required_without:conclusion'],
