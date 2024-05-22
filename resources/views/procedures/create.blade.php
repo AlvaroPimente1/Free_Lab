@@ -119,7 +119,7 @@
                     </div>
 
                     <div class="form-group d-none" id="conclusionDiv">
-                        <label class="label" for="body">Modelo de Conclusão/Observações do Laudo</label>
+                        <label class="label" for="body">Modelo de Conclusão do Laudo</label>
                         <textarea
                             name="conclusion"
                             id="conclusion"
@@ -129,7 +129,7 @@
                     </div>
 
                     <div class="form-group">
-                        <button type="button" id="addConclusion" class="btn btn-primary">Adicionar Conclusão/Observações</button> <button type="button" id="removeConclusion" class="btn btn-danger d-none">Remover Conclusão</button><br>
+                        <button type="button" id="addConclusion" class="btn btn-primary">Adicionar Conclusão</button> <button type="button" id="removeConclusion" class="btn btn-danger d-none">Remover Conclusão</button><br>
                     </div>
                     @error('conclusion')
                         <p class='text-danger'>{{ $errors -> first('conclusion') }}</p>

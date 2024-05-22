@@ -61,10 +61,11 @@ class Kernel extends HttpKernel
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-        'auth.unique.user' => \App\Http\Middleware\CheckUserUniqueAuth::class, //Filtro de login único por usuário
+        'auth.unique.user' => \App\Http\Middleware\CheckUserUniqueAuth::class,
         'expired' => \App\Http\Middleware\SessionExpired::class,
         'expired.home' => \App\Http\Middleware\SessionExpiredHome::class,
     ];
+    
 
     /**
      * The priority-sorted list of middleware.

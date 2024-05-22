@@ -140,7 +140,7 @@
                             echo "d-none";
                         }
                         @endphp" id="conclusionDiv">
-                        <label class="label" for="body">Modelo de Conclusão/Observações do Laudo</label>
+                        <label class="label" for="body">Modelo de Conclusão/ões do Laudo</label>
                         <textarea
                             name="conclusion"
                             id="conclusion"
@@ -154,10 +154,10 @@
 
                     <div class="form-group">
                         @if ($procedure->conclusion)
-                            <button type="button" id="addConclusion" class="btn btn-primary d-none">Adicionar Conclusão/Observações</button> <button type="button" id="removeConclusion" class="btn btn-danger">Remover Conclusão</button><br>
+                            <button type="button" id="addConclusion" class="btn btn-primary d-none">Adicionar Conclusão</button> <button type="button" id="removeConclusion" class="btn btn-danger">Remover Conclusão</button><br>
                         @endif
                         @if (!$procedure->conclusion)
-                            <button type="button" id="addConclusion" class="btn btn-primary">Adicionar Conclusão/Observações</button> <button type="button" id="removeConclusion" class="btn btn-danger d-none">Remover Conclusão</button><br>
+                            <button type="button" id="addConclusion" class="btn btn-primary">Adicionar Conclusão</button> <button type="button" id="removeConclusion" class="btn btn-danger d-none">Remover Conclusão</button><br>
                         @endif                    
                     </div>
 
