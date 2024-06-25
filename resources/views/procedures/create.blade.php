@@ -118,6 +118,34 @@
                         <button type="button" id="removeField" class="btn btn-danger" disabled="disabled">Remover Exame</button><br>
                     </div>
 
+                    <div class="mb-4 mt-4">
+                        <h4>Soros Utilizados</h4>
+                        <hr>
+
+                        <div class="row gp-3 mb-2">
+                            <div class="ml-3">
+                                <input type="checkbox" id="lipemico" name="Lipemico" />
+                                <label for="Lipemico">Lipêmico</label>
+                            </div>
+
+                            <div class="ml-3">
+                                <input type="checkbox" id="icterico" name="icterico" />
+                                <label for="icterico">Ictérico</label>
+                            </div>
+
+                            <div class="ml-3">
+                                <input type="checkbox" id="hemolisado" name="hemolisado" />
+                                <label for="hemosilado">Hemosilado</label>
+                            </div>
+
+                            <div class="ml-3">
+                                <div class="col-sm-10">
+                                    <input type="email" class="form-control form-control-sm" id="colFormLabelSm" placeholder="Outro">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="form-group d-none" id="conclusionDiv">
                         <label class="label" for="body">Modelo de Conclusão do Laudo</label>
                         <textarea
