@@ -27,7 +27,7 @@
                             name="name"
                             id="name"
                             placeholder="Ex: Hemograma"
-                            value="{{old('name')}}"
+                            value="{{ old('name') }}"
                             required>
 
                         @error('name')
@@ -43,7 +43,7 @@
                             name="mnemonic"
                             id="mnemonic"
                             placeholder="Ex: HEM"
-                            value="{{old('mnemonic')}}"
+                            value="{{ old('mnemonic') }}"
                             required>
 
                         @error('mnemonic')
@@ -59,7 +59,7 @@
                             name="method"
                             id="method"
                             placeholder="Ex: Automático"
-                            value="{{old('method')}}"
+                            value="{{ old('method') }}"
                             required>
 
                         @error('method')
@@ -78,40 +78,17 @@
                             <h6>Valor</h6>
                         </div>
                         <div class="col-sm">
-                            <h6>Valor de Refência</h6>
+                            <h6>Valor de Referência</h6>
                         </div>
                     </div>
 
                     <p></p>
 
                     <div id="fieldsGroup">
-                        {{-- =========Tirar após criar função no JS======== --}}
-                        {{-- <div class="row g-3">
-                            <div class="col-sm-5">
-                                <input type="text" class="form-control" placeholder="Ex: Plaquetas" aria-label="City">
-                            </div>
-                            <div class="col-sm">
-                                <input type="text" class="form-control" placeholder="Preenchido depois" aria-label="State" disabled>
-                            </div>
-                            <div class="col-sm">
-                                <input type="text" class="form-control" placeholder="Ex: 140 000 a 450 000/µL" aria-label="Zip">
-                            </div>
-                        </div>
-                        <p></p> --}}
-                        {{-- =============================================== --}}
+                        {{-- Adicionar dinamicamente os campos de exames aqui --}}
                     </div>
 
                     <p></p>
-
-                    {{-- <div class="form-group">
-                        <table class="table table-borderless">
-                            <tbody id="fieldsGroup">
-                            </tbody>
-                        </table>
-                        @error('fields')
-                            <p class='text-danger' id='fielderror'>{{ $errors -> first('fields') }}</p>
-                        @enderror
-                    </div> --}}
 
                     <div class="form-group">
                         <button type="button" id="addField" class="btn btn-primary">Novo Exame</button>
@@ -124,23 +101,23 @@
 
                         <div class="row gp-3 mb-2">
                             <div class="ml-3">
-                                <input type="checkbox" id="lipemico" name="Lipemico" />
-                                <label for="Lipemico">Lipêmico</label>
+                                <input type="checkbox" id="soro_lipemico" name="soro_lipemico" />
+                                <label for="soro_lipemico">Lipêmico</label>
                             </div>
 
                             <div class="ml-3">
-                                <input type="checkbox" id="icterico" name="icterico" />
-                                <label for="icterico">Ictérico</label>
+                                <input type="checkbox" id="soro_icterico" name="soro_icterico" />
+                                <label for="soro_icterico">Ictérico</label>
                             </div>
 
                             <div class="ml-3">
-                                <input type="checkbox" id="hemolisado" name="hemolisado" />
-                                <label for="hemosilado">Hemosilado</label>
+                                <input type="checkbox" id="soro_hemolisado" name="soro_hemolisado" />
+                                <label for="soro_hemolisado">Hemolisado</label>
                             </div>
 
                             <div class="ml-3">
                                 <div class="col-sm-10">
-                                    <input type="email" class="form-control form-control-sm" id="colFormLabelSm" placeholder="Outro">
+                                    <input type="text" name="soro_outro" class="form-control form-control-sm" id="soro_outro" placeholder="Outro">
                                 </div>
                             </div>
                         </div>
@@ -152,12 +129,13 @@
                             name="conclusion"
                             id="conclusion"
                             class="form-control mce"
-                            value="{{old('conclusion')}}"
+                            value="{{ old('conclusion') }}"
                         ></textarea>
                     </div>
 
                     <div class="form-group">
-                        <button type="button" id="addConclusion" class="btn btn-primary">Adicionar Conclusão</button> <button type="button" id="removeConclusion" class="btn btn-danger d-none">Remover Conclusão</button><br>
+                        <button type="button" id="addConclusion" class="btn btn-primary">Adicionar Conclusão</button> 
+                        <button type="button" id="removeConclusion" class="btn btn-danger d-none">Remover Conclusão</button><br>
                     </div>
                     @error('conclusion')
                         <p class='text-danger'>{{ $errors -> first('conclusion') }}</p>

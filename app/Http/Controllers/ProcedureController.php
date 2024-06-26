@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 class ProcedureController extends Controller
 {
     use SoftDeletes;
+
     /**
      * Display a listing of the resource.
      *
@@ -151,6 +152,10 @@ class ProcedureController extends Controller
             'fields'        => ['present', 'required_without:conclusion'],
             'textmodel'     => ['required'],
             'conclusion'    => ['present', 'required_without:fields'],
+            'soro_lipemico' => ['boolean'],
+            'soro_hemolisado' => ['boolean'],
+            'soro_icterico' => ['boolean'],
+            'soro_outro' => ['nullable', 'string', 'max:50'],
         ]);
     }
 }
