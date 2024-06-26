@@ -11,7 +11,7 @@
                         <p></p>
                     </div>
 
-                    <div class="d-flex justify-content-center my-1">
+                    <div class="d-flex justify-content-center mb-4">
                         <a href="{{ route('procedures.create', ['lab_id' => $lab_id, 'text' => 0]) }}" class="btn btn-primary mr-2">Criar novo modelo</a>
                     </div>
 

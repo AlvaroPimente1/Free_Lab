@@ -101,23 +101,23 @@
 
                         <div class="row gp-3 mb-2">
                             <div class="ml-3">
-                                <input type="checkbox" id="soro_lipemico" name="soro_lipemico" />
+                                <input type="checkbox" id="soro_lipemico" name="soro_lipemico" value="1" {{ old('soro_lipemico') ? 'checked' : '' }} />
                                 <label for="soro_lipemico">Lipêmico</label>
                             </div>
 
                             <div class="ml-3">
-                                <input type="checkbox" id="soro_icterico" name="soro_icterico" />
+                                <input type="checkbox" id="soro_icterico" name="soro_icterico" value="1" {{ old('soro_icterico') ? 'checked' : '' }} />
                                 <label for="soro_icterico">Ictérico</label>
                             </div>
 
                             <div class="ml-3">
-                                <input type="checkbox" id="soro_hemolisado" name="soro_hemolisado" />
+                                <input type="checkbox" id="soro_hemolisado" name="soro_hemolisado" value="1" {{ old('soro_hemolisado') ? 'checked' : '' }} />
                                 <label for="soro_hemolisado">Hemolisado</label>
                             </div>
 
                             <div class="ml-3">
                                 <div class="col-sm-10">
-                                    <input type="text" name="soro_outro" class="form-control form-control-sm" id="soro_outro" placeholder="Outro">
+                                    <input type="text" name="soro_outro" class="form-control form-control-sm" id="soro_outro" placeholder="Outro" value="{{ old('soro_outro') }}">
                                 </div>
                             </div>
                         </div>
@@ -129,8 +129,7 @@
                             name="conclusion"
                             id="conclusion"
                             class="form-control mce"
-                            value="{{ old('conclusion') }}"
-                        ></textarea>
+                        >{{ old('conclusion') }}</textarea>
                     </div>
 
                     <div class="form-group">
