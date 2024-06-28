@@ -80,6 +80,13 @@
                                 </tbody>
                             </table>
                         @endif
+                        <hr style="
+                                border-top: 2px dashed #CCC;
+                                border-bottom: 2px dashed #CCC;
+                                height: 2px;
+                                overflow: visible;
+                            ">
+                        <h4>Soro Utilizado:</h4>
                         @if ($report->conclusion)
                             <p></p>
                             <hr style="

@@ -122,16 +122,19 @@
 
                         <div class="row gp-3 mb-2">
                             <div class="ml-3">
+                                <input type="hidden" name="soro_lipemico" value="0">
                                 <input type="checkbox" id="soro_lipemico" name="soro_lipemico" value="1" {{ old('soro_lipemico', $procedure->soro_lipemico) ? 'checked' : '' }} />
                                 <label for="soro_lipemico">Lipêmico</label>
                             </div>
 
                             <div class="ml-3">
+                                <input type="hidden" name="soro_icterico" value="0">
                                 <input type="checkbox" id="soro_icterico" name="soro_icterico" value="1" {{ old('soro_icterico', $procedure->soro_icterico) ? 'checked' : '' }} />
                                 <label for="soro_icterico">Ictérico</label>
                             </div>
 
                             <div class="ml-3">
+                                <input type="hidden" name="soro_hemolisado" value="0">
                                 <input type="checkbox" id="soro_hemolisado" name="soro_hemolisado" value="1" {{ old('soro_hemolisado', $procedure->soro_hemolisado) ? 'checked' : '' }} />
                                 <label for="soro_hemolisado">Hemolisado</label>
                             </div>
