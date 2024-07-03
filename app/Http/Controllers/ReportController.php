@@ -67,22 +67,33 @@ class ReportController extends Controller
 
     public function store(Request $request)
     {
-        // Persists a created resource
         $creator = auth()->user()->id;
+    
+        // Verifica se o laboratório existe
         if (!($laboratory = Laboratory::find($request->lab_id))) {
             return view('errors.404');
         }
-
+    
+        // Obtém o procedimento
+        $procedure = Procedure::find($request->procedure);
+    
+        // Cria uma nova instância de Report com os dados validados
         $report = new Report($this->validateReport());
-        // LINHAS IMPORTANTES ABAIXO
-        $report -> laboratory_id = $request->lab_id;
-        $report -> patient_id = request('patient'); //Temporário, trocar ao completar sistema de pacientes
-        $report -> signer_id = $creator; //Temporário, trocar ao completar sistema de verificação
-        $report -> creator_id = $creator;
-        $report -> procedure_id = request('procedure'); //Preenche o ID do procedimento automaticamente
-
-        $report -> save(); // Persists resource
-
+    
+        // Preenche os campos do laudo
+        $report->laboratory_id = $request->lab_id;
+        $report->patient_id = request('patient'); // Temporário, trocar ao completar sistema de pacientes
+        $report->signer_id = $creator; // Temporário, trocar ao completar sistema de verificação
+        $report->creator_id = $creator;
+        $report->procedure_id = request('procedure'); // Preenche o ID do procedimento automaticamente
+    
+        $report->soro_lipemico = $procedure->soro_lipemico;
+        $report->soro_hemolisado = $procedure->soro_hemolisado;
+        $report->soro_icterico = $procedure->soro_icterico;
+        $report->soro_outro = $procedure->soro_outro;
+    
+        $report->save();
+    
         return redirect()->route('administrators.show', $request->lab_id);
     }
 
@@ -111,11 +122,14 @@ class ReportController extends Controller
     public function validateReport()
     {
         return request()->validate([
-            // 'mnemonic'      => ['required', 'max:3'], <- Procedimento é preenchido automaticamente
             'body'          => ['present', 'required_without:conclusion'],
             'method'        => 'required',
             'conclusion'    => ['present', 'required_without:body'],
             'requester'     => 'required',
+            'soro_lipemico' => 'boolean',
+            'soro_hemolisado' => 'boolean',
+            'soro_icterico' => 'boolean',
+            'soro_outro'    => 'nullable|string|max:50'
         ]);
     }
 }
