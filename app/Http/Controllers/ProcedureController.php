@@ -156,6 +156,7 @@ class ProcedureController extends Controller
             'soro_hemolisado' => ['boolean'],
             'soro_icterico' => ['boolean'],
             'soro_outro' => ['nullable', 'string', 'max:50'],
+            'material' => ['required']
         ]);
     }
 }

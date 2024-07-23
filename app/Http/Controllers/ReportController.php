@@ -129,7 +129,8 @@ class ReportController extends Controller
             'soro_lipemico' => 'boolean',
             'soro_hemolisado' => 'boolean',
             'soro_icterico' => 'boolean',
-            'soro_outro'    => 'nullable|string|max:50'
+            'soro_outro'    => 'nullable|string|max:50',
+            'material' => ['required']
         ]);
     }
 }

@@ -16,7 +16,8 @@ class Procedure extends Model
         'soro_lipemico', 
         'soro_hemolisado', 
         'soro_icterico', 
-        'soro_outro'
+        'soro_outro',
+        'material'
     ];
 
     // Relação 1 para muitos entre modelos de laudos e laudo (Um modelo de laudo pode ter vários laudos)

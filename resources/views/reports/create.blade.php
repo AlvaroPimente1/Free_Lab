@@ -64,6 +64,22 @@
                     </div>
 
                     <div class="form-group">
+                        <label class="label" for="method">Material</label>
+                        <input
+                            class="form-control @error('material')border-danger @enderror"
+                            type="text"
+                            name="material"
+                            id="material"
+                            value="{{$procedure->material}}"
+                            required>
+
+                        @error('method')
+                        <p class="text-danger">{{$errors->first('method')}}</p>
+                        @enderror
+
+                    </div>
+
+                    <div class="form-group">
                         <label class="label" for="patient">Paciente: {{$patient->name}}</label>
 
                         @error('patient')

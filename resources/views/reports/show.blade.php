@@ -26,6 +26,7 @@
 
                 <h2 class="text-center font-weight-bold">{{ $report->procedure->name }}</h2>
                 <h4><p class="text-center">Método: {{ $report->method }}</p></h4>
+                <h4><p class="text-center">Material: {{ $report->material }}</p></h4>
 
                 <div class="outer-container border" style="padding: 20px">
                     <table style="width: 100%">

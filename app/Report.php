@@ -16,7 +16,8 @@ class Report extends Model
         'soro_lipemico',
         'soro_hemolisado',
         'soro_icterico',
-        'soro_outro'
+        'soro_outro',
+        'material'
     ];
 
     // Relação muitos para 1 entre laudo e usuário (Um médico pode gerar vários laudos)
