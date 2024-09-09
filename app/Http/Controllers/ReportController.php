@@ -32,70 +32,68 @@ class ReportController extends Controller
 
     public function create(Request $request, Procedure $procedure)
     {
-
         if (!($laboratory = Laboratory::find($request->lab_id))) {
             return view('errors.404');
         }
-        // Shows a view to create a new resource
+        
         $user = auth()->user()->id;
         $user = User::find($user);
-
-        if (!$procedure->textmodel) {
-            $fields = explode('!@#',$procedure->fields);
+    
+        if ($procedure->fields) {
+            $fields = json_decode($procedure->fields, true);
         } else {
-            $fields = $procedure->fields;
+            $fields = [];
         }
-
-
-        if(isset($request->patient)){
+    
+        if (isset($request->patient)) {
             $patient = Patient::find($request->patient);
             return view('reports.create', [
                 'fields' => $fields,
-                //'labs' => $user->labs,
                 'procedure' => $procedure,
                 'patient' => $patient,
                 'lab_id' => $request->lab_id
             ]);
         }
-
+    
         return view('reports.index', [
             'patients' => $laboratory->patients->all(),
             'procedure' => $procedure,
             'lab_id' => $request->lab_id
         ]);
     }
-
+    
     public function store(Request $request)
     {
         $creator = auth()->user()->id;
     
-        // Verifica se o laboratório existe
         if (!($laboratory = Laboratory::find($request->lab_id))) {
             return view('errors.404');
         }
     
-        // Obtém o procedimento
         $procedure = Procedure::find($request->procedure);
     
         // Cria uma nova instância de Report com os dados validados
         $report = new Report($this->validateReport());
     
-        // Preenche os campos do laudo
         $report->laboratory_id = $request->lab_id;
-        $report->patient_id = request('patient'); // Temporário, trocar ao completar sistema de pacientes
-        $report->signer_id = $creator; // Temporário, trocar ao completar sistema de verificação
+        $report->patient_id = request('patient'); 
+        $report->signer_id = $creator; 
         $report->creator_id = $creator;
-        $report->procedure_id = request('procedure'); // Preenche o ID do procedimento automaticamente
+        $report->procedure_id = request('procedure'); 
     
+        // Preenche os dados do soros do procedimento
         $report->soro_lipemico = $procedure->soro_lipemico;
         $report->soro_hemolisado = $procedure->soro_hemolisado;
         $report->soro_icterico = $procedure->soro_icterico;
         $report->soro_outro = $procedure->soro_outro;
     
+        $report->body = $request->input('body');
+    
         $report->save();
     
         return redirect()->route('administrators.show', $request->lab_id);
     }
+    
 
     public function showProcedures(Request $request)
     {

@@ -70,30 +70,18 @@
                     <h4>Exames</h4>
                     <hr>
 
-                    <div class="row g-3">
-                        <div class="col-sm-5">
-                          <h6>Nome do Exame</h6>
-                        </div>
-                        <div class="col-sm">
-                            <h6>Valor</h6>
-                        </div>
-                        <div class="col-sm">
-                            <h6>Valor de Referência</h6>
-                        </div>
-                    </div>
-
                     <p></p>
 
-                    <div id="fieldsGroup">
-                        {{-- Adicionar dinamicamente os campos de exames aqui --}}
-                    </div>
+                    <div id="sessionsGroup">
+                            {{-- Sessões serão adicionadas dinamicamente aqui --}}
+                        </div>
+
+                        <div class="form-group">
+                            <button type="button" id="addSession" class="btn btn-primary">Adicionar Sessão</button>
+                            <button type="button" id="removeSession" class="btn btn-danger" disabled="disabled">Remover Sessão</button><br>
+                        </div>
 
                     <p></p>
-
-                    <div class="form-group">
-                        <button type="button" id="addField" class="btn btn-primary">Novo Exame</button>
-                        <button type="button" id="removeField" class="btn btn-danger" disabled="disabled">Remover Exame</button><br>
-                    </div>
 
                     <div class="mb-4 mt-4">
                         <h4>Soros Utilizados</h4>

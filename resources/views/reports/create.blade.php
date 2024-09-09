@@ -72,45 +72,48 @@
                     </div>
 
                     @if ($procedure->fields)
-                    <h4>Exames</h4>
-                    <hr>
+                    @php
+                        // Decodifica o JSON armazenado no campo fields
+                        $fieldsData = json_decode($procedure->fields, true);
+                    @endphp
 
-                    <div class="row g-3">
-                        <div class="col-sm-5">
-                          <h6>Nome do Exame</h6>
-                        </div>
-                        <div class="col-sm">
-                            <h6>Valor</h6>
-                        </div>
-                        <div class="col-sm">
-                            <h6>Valor de Refência</h6>
-                        </div>
-                    </div>
-                    
-                    <p></p>
+                    @if (isset($fieldsData['sessions']))
+                        @foreach ($fieldsData['sessions'] as $session)
+                            <h3>{{ $session['sessionName'] }}</h3>
+                            <hr>
 
-                    <div class="form-group">
-                        @foreach ($fields as $field)
-                            @php
-                                $field = explode('!-!', $field);
-                            @endphp
                             <div class="row g-3 mb-2">
                                 <div class="col-sm-5">
-                                    <input class="form-control" for="{{strtolower($field[0])}}" value="{{$field[0]}}" disabled>
+                                    <h6>Nome do Exame</h6>
                                 </div>
                                 <div class="col-sm">
-                                    <input id="{{$field[0]}}" class="form-control" type="text" value="{{old('field[0]')}}" placeholder="Valor de {{$field[0]}}">
+                                    <h6>Valor</h6>
                                 </div>
                                 <div class="col-sm">
-                                    <input class="form-control" value="{{$field[1]}}" disabled>
+                                    <h6>Valor de Referência</h6>
                                 </div>
-                                @error($field[0])
-                                    <p class='text-danger'>{{ $errors -> first($field[0]) }}</p>
-                                @enderror
                             </div>
+
+                            @foreach ($session['exams'] as $exam)
+                                <div class="row g-3 mb-2">
+                                    <div class="col-sm-5">
+                                        <input class="form-control" name="exam_{{ strtolower($exam['examName']) }}" value="{{ $exam['examName'] }}" disabled>
+                                    </div>
+                                    <div class="col-sm">
+                                        <input class="form-control" id="exam_{{ strtolower($exam['examName']) }}" name="values[{{ strtolower($exam['examName']) }}]" type="text" value="{{ old('values.' . strtolower($exam['examName'])) }}" placeholder="Valor de {{ $exam['examName'] }}">
+                                    </div>
+                                    <div class="col-sm">
+                                        <input class="form-control" value="{{ $exam['referenceValue'] }}" disabled>
+                                    </div>
+                                    @error('values.' . strtolower($exam['examName']))
+                                        <p class='text-danger'>{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            @endforeach
                         @endforeach
-                    </div>
                     @endif
+                @endif
+
                     <hr class="border">
                    <div class="form-group">
                         <label class="label" for="body">Conclusão do Laudo</label>
@@ -157,33 +160,37 @@
 </div>
 {{-- Tudo abaixo é para motivos de teste. Nada além da variável fieldNames deve ser mantido, e o resto deve ser exportado para um arquivo *.js --}}
 <script>
-    var fieldNames = {!! json_encode($fields) !!};
-    var bodyFull;
-
-    function isConfirmed(){
-        let c = confirm("Você confirma que todos os dados neste formulário estão corretos?");
-        return c;
-    };
-
     function makeBody(){
-        fieldNames.forEach(unifyFields);
-        $('#body').val(bodyFull);
-    }
+        let jsonStructure = {
+            sessions: []
+        };
 
-    function unifyFields(field, index, array){
-        let currentField = field;
-        let fieldName = field.split("!-!");
-        fieldName = fieldName[0];
-        let fieldValue = document.getElementById(fieldName).value;
-        if(fieldValue){
-            if(bodyFull){
-                bodyFull = bodyFull + "@-@" + currentField + "!-!" + fieldValue;
-            }
-            else{
-                bodyFull = currentField + "!-!" + fieldValue;
-            }
-        }
-    }
+        // Itera sobre cada sessão
+        $('.card-body').find('h3').each(function(){
+            let sessionName = $(this).text().trim();
+            let exams = [];
 
+            // Itera sobre os exames dentro da sessão
+            $(this).next('hr').nextAll('.row.g-3.mb-2').each(function(){
+                let examName = $(this).find('input.form-control[disabled]').val();
+                let fieldValue = $(this).find('input[type="text"]').val();
+                let referenceValue = $(this).find('input[type="text"].form-control[disabled]').val();
+
+                exams.push({
+                    examName: examName,
+                    value: fieldValue,
+                    referenceValue: referenceValue
+                });
+            });
+
+            jsonStructure.sessions.push({
+                sessionName: sessionName,
+                exams: exams
+            });
+        });
+
+        console.log(JSON.stringify(jsonStructure)); // Para verificar se o JSON está correto
+        $('#body').val(JSON.stringify(jsonStructure));
+    }
 </script>
 @endsection

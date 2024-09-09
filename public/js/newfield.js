@@ -23,110 +23,131 @@ class Stack { // Para os campos, utiliza-se uma pilha
 }
 
 $(document).ready(function(){
-    let fields = new Stack;
-    if($('#fieldCount').length > 0){
-        fields.top = parseInt($('#fieldCount').val());
-    }
+    let sessionCount = 0;
+    let fields = {};
 
     function btnRemoveDisabled() {
-        var btn = document.getElementById("removeField");
-        if(fields.length() == 0){
-            btn.disabled = true;
-        } else {
-            btn.disabled = false;
-        }
+        $('#removeSession').prop('disabled', sessionCount === 0);
     }
 
-    $('#addField').click(function(){
-        fields.push(); // Incrementa em 1
-        $('#fieldsGroup').append('<div class="row g-3 mb-2" id="'+ fields.length() +'"></tr>');
-        $('#'+fields.length()).append('<div class="col-sm-5" id="'+ fields.length() +'_1"></div>');
-        $('#'+fields.length()+'_1').append('<input type="text" class="form-control" id="iField' + fields.length() + '"placeholder="Ex: Plaquetas" required>');
-        $('#'+fields.length()).append('<div class="col-sm" id="'+ fields.length() +'_2"></div>');
-        $('#'+fields.length()+'_2').append('<input type="text" placeholder="Preenchido depois" class="form-control" disabled>');
-        $('#'+fields.length()).append('<div class="col-sm" id="'+ fields.length() +'_3"></div>');
-        $('#'+fields.length()+'_3').append('<input type="text" id="ref' + fields.length() + '"placeholder="Ex: 140 000 a 450 000/µL" class="form-control" required>');
+    $('#addSession').click(function(){
+        sessionCount++;
+        let sessionID = 'session' + sessionCount;
+        fields[sessionID] = [];
+
+        $('#sessionsGroup').append(`
+            <div class="session mb-4" id="${sessionID}">
+                <h5>Sessão <input type="text" class="form-control d-inline-block w-auto" placeholder="Nome da Sessão" name="${sessionID}_name" required></h5>
+                <div class="row g-3 mb-2 mt-3">
+                    <div class="col-sm-5"><h6>Nome do Exame</h6></div>
+                    <div class="col-sm"><h6>Valor de Referência</h6></div>
+                </div>
+                <div class="examsGroup mt-2"></div>
+                <button type="button" class="btn btn-primary addExam" data-session="${sessionID}">Adicionar Exame</button>
+                <button type="button" class="btn btn-danger removeSession" data-session="${sessionID}">Remover Sessão</button>
+                <hr>
+            </div>
+        `);
+
         btnRemoveDisabled();
-    })
+    });
 
-    $('#removeField').click(function(){
-        $('div').remove('#'+fields.length());
-        fields.pop();
+    $(document).on('click', '.addExam', function(){
+        let sessionID = $(this).data('session');
+        let examID = fields[sessionID].length + 1;
+
+        fields[sessionID].push(examID);
+
+        $('#' + sessionID + ' .examsGroup').append(`
+            <div class="row g-3 mb-2 exam" id="${sessionID}_exam${examID}">
+                <div class="col-sm-5">
+                    <input type="text" class="form-control" placeholder="Ex: Plaquetas" name="${sessionID}_exam${examID}_name" required>
+                </div>
+                <div class="col-sm">
+                    <input type="text" class="form-control" placeholder="Ex: 140 000 a 450 000/µL" name="${sessionID}_exam${examID}_ref" required>
+                </div>
+                <div class="col-sm-2">
+                    <button type="button" class="btn btn-danger removeExam" data-session="${sessionID}" data-exam="${examID}">Remover Exame</button>
+                </div>
+            </div>
+        `);
+    });
+
+    $(document).on('click', '.removeExam', function(){
+        let sessionID = $(this).data('session');
+        let examID = $(this).data('exam');
+        
+        $('#' + sessionID + '_exam' + examID).remove();
+        
+        // Remove o exame da estrutura fields
+        fields[sessionID] = fields[sessionID].filter(id => id !== examID);
+    });
+
+    $(document).on('click', '.removeSession', function(){
+        let sessionID = $(this).data('session');
+        $('#' + sessionID).remove();
+        delete fields[sessionID];
+        sessionCount--;
         btnRemoveDisabled();
-    })
+    });
 
-    /* $('#addField').click(function(){
-        fields.push(); // Incrementa em 1
-
-        $('#fieldsGroup').append('<tr id="'+ fields.length() +'"></tr>');
-        $('#'+fields.length()).append('<label class="mt-2">Exame '+ fields.length() +' </label>');
-        $('#'+fields.length()).append('<input type="text" id="iField' + fields.length() + '"placeholder="Plaquetas" class="form-control" required>');
-        $('#'+fields.length()).append('<label class="mt-2">Valor de referência do exame '+ fields.length() +' </label>');
-        $('#'+fields.length()).append('<input type="text" id="ref' + fields.length() + '"placeholder="140 000 a 450 000/µL" class="form-control" required>');
-    }) */
-
-    /* $('#removeField').click(function(){
-        $('tr').remove('#'+fields.length());
-        $('input').remove('#iField'+fields.length());
-        $('label').remove('#field'+fields.length());
-        $('input').remove('#ref'+fields.length());
-        fields.pop();
-    }) */
-
-    $('#addConclusion').click(function(){
-        $('#addConclusion').addClass("d-none");
-        $('#removeConclusion').removeClass("d-none");
-
-        $('#conclusionDiv').removeClass("d-none");
-    })
-
-    $('#removeConclusion').click(function(){
-        $('#removeConclusion').addClass("d-none");
-        $('#addConclusion').removeClass("d-none");
-
-        $('#conclusionDiv').addClass("d-none");
-        $('#conclusion').val("");
-    })
-
-    // Gera o valor final que será incluído nos campos p/ a criação de novo tipo de laudo
     $('#procedureForm').submit(function(){
-        if(fields.length()){
-            let counterValue = fields.length();
-            console.log(fields.length());
-            let full;
-            for (let i=1; i<=counterValue; i++){
-                console.log(i);
-                if (full){
-                    full = full + "!@#" + $('#iField'+i).val() + '!-!' + $('#ref'+i).val();
-                    console.log(full);
-                }
-                else{
-                    full = $('#iField'+i).val() + '!-!' + $('#ref'+i).val();
-                    console.log(full);
-                }
-            }
-            $('textarea#body').val(full);
-        }
-    })
+        let jsonStructure = {
+            sessions: []
+        };
 
-    // Gera o valor final que será incluído nos campos p/ a edição de laudos
+        $('.session').each(function(){
+            let sessionName = $(this).find('input[name$="_name"]').val();
+            let exams = [];
+
+            $(this).find('.exam').each(function(){
+                let examName = $(this).find('input[name$="_name"]').val();
+                let referenceValue = $(this).find('input[name$="_ref"]').val();
+
+                exams.push({
+                    examName: examName,
+                    value: null,
+                    referenceValue: referenceValue
+                });
+            });
+
+            jsonStructure.sessions.push({
+                sessionName: sessionName,
+                exams: exams
+            });
+        });
+
+        $('textarea#body').val(JSON.stringify(jsonStructure));
+    });
+
     $('#procedureFormEdit').submit(function(){
-        if(fields.length()){
-            let counterValue = fields.length();
-            console.log(fields.length());
-            let full;
-            for (let i=1; i<=counterValue; i++){
-                console.log(i);
-                if (full){
-                    full = full + "!@#" + $('#iField'+i).val() + '!-!' + $('#ref'+i).val();
-                    console.log(full);
-                }
-                else{
-                    full = $('#iField'+i).val() + '!-!' + $('#ref'+i).val();
-                    console.log(full);
-                }
-            }
-            $('textarea#body').val(full);
-        }
-    })
-})
+        let jsonStructure = {
+            sessions: []
+        };
+
+        $('.session').each(function(){
+            let sessionName = $(this).find('input[name$="_name"]').val();
+            let exams = [];
+
+            $(this).find('.exam').each(function(){
+                let examName = $(this).find('input[name$="_name"]').val();
+                let referenceValue = $(this).find('input[name$="_ref"]').val();
+
+                exams.push({
+                    examName: examName,
+                    value: null,
+                    referenceValue: referenceValue
+                });
+            });
+
+            jsonStructure.sessions.push({
+                sessionName: sessionName,
+                exams: exams
+            });
+        });
+
+        console.log(JSON.stringify(jsonStructure));
+
+        $('textarea#body').val(JSON.stringify(jsonStructure));
+    });
+});

@@ -32,19 +32,46 @@
                                     <td>{{ $procedure->name}}</td>
                                     <td>{{ $procedure->mnemonic}}</td>
                                     <td class="d-flex justify-content-center">
-                                        <a href="{{ route('procedures.edit', ['lab_id' => $lab_id, 'procedure' => $procedure]) }}" class="btn btn-warning mx-2"><b>EDITAR</b></a>
-                                        {{-- <a href="{{ route('procedures.destroy', ['procedure' => $procedure]) }}" value="DELETE" class="btn btn-danger mx-2">DELETAR</a> --}}
+                                        <button type="button" class="btn btn-danger mx-2" onclick="inactivateProcedure({{ $procedure->id }})">INATIVAR</button>
                                     </td>
                                 </tr>
                             @endforeach
                             </tbody>
                         </table>
                         <a href="{{ route('administrators.show', $laboratory->id) }}" class="btn btn-primary mb-2">Voltar</a>
-                        {{-- <button class="btn btn-outline-primary" id="returnButton" type="button">Voltar</button> --}}
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+@endsection
+
+{{-- Adiciona a função JavaScript no final --}}
+@section('scripts')
+<script type="text/javascript">
+    function inactivateProcedure(procedureId) {
+        if (confirm('Tem certeza que deseja inativar este procedimento?')) {
+            // Se o usuário confirmar, envia a requisição AJAX
+            fetch(`/procedures/${procedureId}/inactivate`, {
+                method: 'PUT',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('Procedimento inativado com sucesso!');
+                    location.reload(); // Recarrega a página
+                } else {
+                    alert('Ocorreu um erro ao tentar inativar o procedimento.');
+                }
+            })
+            .catch(error => {
+                alert('Ocorreu um erro: ' + error);
+            });
+        }
+    }
+</script>
 @endsection
