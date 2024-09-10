@@ -13,6 +13,7 @@
 
                     <div class="d-flex justify-content-center mb-4">
                         <a href="{{ route('procedures.create', ['lab_id' => $lab_id, 'text' => 0]) }}" class="btn btn-primary mr-2">Criar novo modelo</a>
+                        <!-- <a href="{{ route('procedures.inactives', ['lab_id' => $lab_id]) }}" class="btn btn-secondary">Ver Procedimentos Inativos</a> Botão para inativos -->
                     </div>
 
                     <div class="table-responsive-md">
@@ -32,7 +33,8 @@
                                     <td>{{ $procedure->name}}</td>
                                     <td>{{ $procedure->mnemonic}}</td>
                                     <td class="d-flex justify-content-center">
-                                        <button type="button" class="btn btn-danger mx-2" onclick="inactivateProcedure({{ $procedure->id }})">INATIVAR</button>
+                                        <a href="{{ route('procedures.edit', ['lab_id' => $lab_id, 'procedure' => $procedure]) }}" class="btn btn-success mx-2"><b>VISUALIZAR</b></a>
+                                        <button type="button" class="btn btn-danger mx-2" onclick="inactivateProcedure({{ $procedure->id }})">EXCLUIR</button>
                                     </td>
                                 </tr>
                             @endforeach

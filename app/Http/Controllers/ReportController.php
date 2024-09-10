@@ -86,6 +86,7 @@ class ReportController extends Controller
         $report->soro_hemolisado = $procedure->soro_hemolisado;
         $report->soro_icterico = $procedure->soro_icterico;
         $report->soro_outro = $procedure->soro_outro;
+        $report->material = $procedure->material;
     
         $report->body = $request->input('body');
     
@@ -97,21 +98,28 @@ class ReportController extends Controller
 
     public function showProcedures(Request $request)
     {
+        // Verifica se o laboratório existe
         if (!($laboratory = Laboratory::find($request->lab_id))) {
             return view('errors.404');
         }
-
+    
+        // Verifica se o paciente existe
         if (!($patient = Patient::find($request->patient_id))) {
             return view('errors.404');
         }
-
+    
+        // Filtra os procedimentos com status 1 (ativos)
+        $procedures = $laboratory->procedures()->where('status', 1)->get();
+    
+        // Retorna a view com os procedimentos filtrados
         return view('reports.procedureChoice', [
             'patient_id' => $patient->id,
-            'procedures' => $laboratory->procedures,
+            'procedures' => $procedures, // Agora só traz os procedimentos com status 1
             'lab_id' => $laboratory->id,
             'laboratory' => $laboratory
         ]);
     }
+    
     // public function destroy()
     // {
     // Não existe na versão final

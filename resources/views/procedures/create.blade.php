@@ -67,6 +67,22 @@
                         @enderror
                     </div>
 
+                    <div class="form-group">
+                        <label class="label" for="material">Material do Procedimento</label>
+                        <input
+                            class="form-control @error('material') border-danger @enderror"
+                            type="text"
+                            name="material"
+                            id="material"
+                            placeholder="Ex: Material"
+                            value="{{ old('material') }}"
+                            required>
+
+                        @error('method')
+                            <p class="text-danger">{{$errors->first('material')}}</p>
+                        @enderror
+                    </div>
+
                     <h4>Exames</h4>
                     <hr>
 

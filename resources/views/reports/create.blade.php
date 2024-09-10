@@ -10,7 +10,7 @@
                 <form method="POST" action="{{ route('storeReport', ['lab_id' => $lab_id, 'procedure' => $procedure->id, 'patient' => $patient->id]) }}" onsubmit="makeBody()">
                     @csrf
 
-                    <h4>Dados Gerais</h4>
+                    <h4>{{$procedure->name}}</h4>
                     <hr>
                     {{--<div class="form-group">
                         {{-- <input
@@ -24,7 +24,7 @@
                         @error('mnemonic')
                             <p class='text-danger'>{{ $errors -> first('mnemonic') }}</p>
                         @enderror --}}
-                        <label class="label" for="procedure">{{$procedure->name}}</label>
+                        
                         {{--<select class="form-control" id="dynamic_select" name="procedure">
                             @foreach ($procedures as $procedure)
                                 <option value="{{$procedure->id}}">{{$procedure->name }}</option>
@@ -59,6 +59,22 @@
 
                         @error('method')
                         <p class="text-danger">{{$errors->first('method')}}</p>
+                        @enderror
+
+                    </div>
+
+                    <div class="form-group">
+                        <label class="label" for="material">Material</label>
+                        <input
+                            class="form-control @error('material')border-danger @enderror"
+                            type="text"
+                            name="material"
+                            id="material"
+                            value="{{$procedure->material}}"
+                            required>
+
+                        @error('method')
+                        <p class="text-danger">{{$errors->first('material')}}</p>
                         @enderror
 
                     </div>
@@ -103,7 +119,7 @@
                                         <input class="form-control" id="exam_{{ strtolower($exam['examName']) }}" name="values[{{ strtolower($exam['examName']) }}]" type="text" value="{{ old('values.' . strtolower($exam['examName'])) }}" placeholder="Valor de {{ $exam['examName'] }}">
                                     </div>
                                     <div class="col-sm">
-                                        <input class="form-control" value="{{ $exam['referenceValue'] }}" disabled>
+                                        <input class="form-control" value="{{ $exam['referenceValue'] }}" readonly>
                                     </div>
                                     @error('values.' . strtolower($exam['examName']))
                                         <p class='text-danger'>{{ $message }}</p>
@@ -160,21 +176,21 @@
 </div>
 {{-- Tudo abaixo é para motivos de teste. Nada além da variável fieldNames deve ser mantido, e o resto deve ser exportado para um arquivo *.js --}}
 <script>
-    function makeBody(){
+    function makeBody() {
         let jsonStructure = {
             sessions: []
         };
 
         // Itera sobre cada sessão
-        $('.card-body').find('h3').each(function(){
+        $('.card-body').find('h3').each(function() {
             let sessionName = $(this).text().trim();
             let exams = [];
 
             // Itera sobre os exames dentro da sessão
-            $(this).next('hr').nextAll('.row.g-3.mb-2').each(function(){
-                let examName = $(this).find('input.form-control[disabled]').val();
-                let fieldValue = $(this).find('input[type="text"]').val();
-                let referenceValue = $(this).find('input[type="text"].form-control[disabled]').val();
+            $(this).next('hr').nextAll('.row.g-3.mb-2').each(function() {
+                let examName = $(this).find('input.form-control[readonly]').val(); // Nome do exame
+                let fieldValue = $(this).find('input[type="text"]').val(); // Valor do exame (preenchido pelo usuário)
+                let referenceValue = $(this).find('input.form-control').last().val(); // Valor de referência
 
                 exams.push({
                     examName: examName,
@@ -189,7 +205,7 @@
             });
         });
 
-        console.log(JSON.stringify(jsonStructure)); // Para verificar se o JSON está correto
+        // Atualiza o campo body com o JSON criado
         $('#body').val(JSON.stringify(jsonStructure));
     }
 </script>

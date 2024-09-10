@@ -13,6 +13,7 @@ class Report extends Model
         'laboratory_id', 
         'conclusion', 
         'method',
+        'material',
         'soro_lipemico',
         'soro_hemolisado',
         'soro_icterico',

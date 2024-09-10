@@ -48,6 +48,9 @@ Route::group([
         // **Rotas de Procedures**
         // Define as rotas RESTful para procedures
         Route::resource('procedures', 'ProcedureController');
+        Route::get('/procedures/inactives/{lab_id}', 'ProcedureController@showInactives')->name('procedures.inactives');
+        Route::put('/procedures/{procedure}/activate', 'ProcedureController@activate')->name('procedures.activate');
+
 
         // Rota personalizada para inativar um procedimento
         Route::put('/procedures/{procedure}/inactivate', 'ProcedureController@inactivate')->name('procedures.inactivate');

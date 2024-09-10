@@ -17,6 +17,7 @@ class Procedure extends Model
         'soro_hemolisado', 
         'soro_icterico', 
         'soro_outro',
+        'material',
         'status'
     ];
 

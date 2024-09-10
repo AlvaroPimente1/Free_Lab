@@ -33,6 +33,22 @@ class ProcedureController extends Controller
         ]);
     }
 
+    public function showInactives(Request $request)
+    {
+        if (!($laboratory = Laboratory::find($request->lab_id))) {
+            return view('errors.404');
+        }
+    
+        // Filtra os procedimentos com status 0 (inativos)
+        $procedures = $laboratory->procedures()->where('status', 0)->get();
+    
+        return view('procedures.inactives', [
+            'procedures' => $procedures,
+            'lab_id' => $laboratory->id,
+            'laboratory' => $laboratory
+        ]);
+    }
+
     public function inactivate($id)
     {
         $procedure = Procedure::findOrFail($id);
@@ -44,6 +60,19 @@ class ProcedureController extends Controller
         // Retorna uma resposta simples, sem redirecionar
         return response()->json(['success' => 'Procedimento inativado com sucesso!']);
     }
+
+    public function activate($id)
+    {
+        $procedure = Procedure::findOrFail($id);
+
+        // Altera o status para ativo (1)
+        $procedure->status = 1;
+        $procedure->save();
+
+        return redirect()->route('procedures.inactives', ['lab_id' => $procedure->laboratory_id])
+            ->with('success', 'Procedimento ativado com sucesso!');
+    }
+
 
 
     /**
@@ -206,6 +235,7 @@ class ProcedureController extends Controller
             'name' => ['required', 'max:100'],
             'mnemonic' => ['required', 'max:5'],
             'method' => ['required'],
+            'material' => ['required'],
             'fields' => ['present', 'required_without:conclusion'],
             'textmodel' => ['required'],
             'conclusion' => ['present', 'required_without:fields'],
