@@ -25,10 +25,44 @@ class Stack { // Para os campos, utiliza-se uma pilha
 $(document).ready(function(){
     let sessionCount = 0;
     let fields = {};
+    let noSession = false; // Flag para verificar se está no modo sem sessão
 
     function btnRemoveDisabled() {
         $('#removeSession').prop('disabled', sessionCount === 0);
     }
+
+    // Checkbox para desabilitar sessões
+    $('#noSessionCheckbox').change(function(){
+        noSession = $(this).is(':checked');
+        
+        if (noSession) {
+            // Remover qualquer sessão existente
+            $('.session').remove();
+            fields = {};
+            sessionCount = 0;
+
+            // Criar uma sessão com o nome null
+            let sessionID = 'session_null';
+            fields[sessionID] = [];
+
+            $('#sessionsGroup').append(`
+                <div class="session mb-4" id="${sessionID}">
+                    <div class="row g-3 mb-2 mt-3">
+                        <div class="col-sm-5"><h6>Nome do Exame</h6></div>
+                        <div class="col-sm"><h6>Valor de Referência</h6></div>
+                    </div>
+                    <div class="examsGroup mt-2"></div>
+                    <button type="button" class="btn btn-primary addExam" data-session="${sessionID}">Adicionar Exame</button>
+                </div>
+            `);
+
+            $('#addSession').prop('disabled', true); 
+            btnRemoveDisabled();
+        } else {
+            $('#sessionsGroup').empty(); // Limpa a sessão sem nome
+            $('#addSession').prop('disabled', false); 
+        }
+    });
 
     $('#addSession').click(function(){
         sessionCount++;
@@ -97,7 +131,7 @@ $(document).ready(function(){
         };
 
         $('.session').each(function(){
-            let sessionName = $(this).find('input[name$="_name"]').val();
+            let sessionName = noSession ? null : $(this).find('input[name$="_name"]').val(); // Se for sem sessão, o nome será null
             let exams = [];
 
             $(this).find('.exam').each(function(){
@@ -126,7 +160,7 @@ $(document).ready(function(){
         };
 
         $('.session').each(function(){
-            let sessionName = $(this).find('input[name$="_name"]').val();
+            let sessionName = noSession ? null : $(this).find('input[name$="_name"]').val(); // Se for sem sessão, o nome será null
             let exams = [];
 
             $(this).find('.exam').each(function(){
@@ -140,14 +174,15 @@ $(document).ready(function(){
                 });
             });
 
+            console.log(JSON.stringify(jsonStructure));
+
             jsonStructure.sessions.push({
                 sessionName: sessionName,
                 exams: exams
             });
         });
 
-        console.log(JSON.stringify(jsonStructure));
-
         $('textarea#body').val(JSON.stringify(jsonStructure));
     });
 });
+

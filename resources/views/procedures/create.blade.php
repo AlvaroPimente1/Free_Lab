@@ -88,11 +88,16 @@
 
                     <p></p>
 
+                    <label>
+                        <input type="checkbox" id="noSessionCheckbox"> Sem Sessão
+                    </label>
+
+
                     <div id="sessionsGroup">
                             {{-- Sessões serão adicionadas dinamicamente aqui --}}
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group buttonSession">
                             <button type="button" id="addSession" class="btn btn-primary">Adicionar Sessão</button>
                             <button type="button" id="removeSession" class="btn btn-danger" disabled="disabled">Remover Sessão</button><br>
                         </div>
