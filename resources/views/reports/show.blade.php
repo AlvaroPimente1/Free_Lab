@@ -3,10 +3,14 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-12 card d-flex flex-column" style="height: 1400px; padding: 10px">
-            <img class="card-img" style="margin: auto; width: 500px; opacity: 0.1" src="{{ url('css/logo_ufpa.png') }}" alt="Card image">
-            <div class="card-img-overlay flex-grow-1">
-                
+        <!-- LAUDO COMEÇA AQUI -->
+        <div class="col-md-12 card position-relative" style="min-height: 1400px; padding: 10px;">
+
+            <!-- Aplicando imagem de fundo com opacidade via CSS -->
+            <div class="background-image"></div>
+            
+            <!-- Conteúdo principal do laudo -->
+            <div class="card-body position-relative" style="z-index: 1;">
                 <!-- Informação do Laboratório e Requisição -->
                 <table class="table">
                     <tr>
@@ -19,9 +23,6 @@
                             <div><h5 style="margin: 0px">Telefone: (91) 3201-0950</h5></div>
                         </td>
                         <td class="border text-center" style="width: 25%; vertical-align: middle">
-                            <div><h4 style="margin: 0px">Requisição:</h4></div>
-                            <p></p>
-                            <div><h3 style="margin: 0px">{{ $report->id }}</h3></div>
                         </td>
                     </tr>
                 </table>
@@ -31,42 +32,54 @@
                 <h4><p class="text-center">Método: {{ $report->method }}</p></h4>
                 <h4><p class="text-center">Material: {{ $report->material }}</p></h4>
 
-                <div class="outer-container" style="padding: 30px">
+                <h5 class="text-center">Médico Requisitante: <b>{{ $report->requester ?? 'Não Definido' }}</b></h5>
 
                 <!-- Informação do Paciente e Exame -->
-                <table class="table table-borderless">
-                    <tr>
-                        <td style="width: 50%;">
-                            <h5>Nome do Paciente: <b>{{ $report->patient->name ?? 'Não Definido' }}</b></h5>
-                        </td>
-                        <td style="width: 50%; text-align: right;">
-                            <h5>Data da Realização do Exame: <b>{{ $report->created_at->format('d/m/Y') }}</b></h5>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="width: 50%;">
-                            <h5>Número de Cadastro: <b>{{ $report->patient_id ?? 'Não Definido' }}</b></h5>
-                        </td>
-                        <td style="width: 50%; text-align: right;">
-                            <h5>Médico Requisitante: <b>{{ $report->requester ?? 'Não Definido' }}</b></h5>
-                        </td>
-                    </tr>
-                </table>
+                <div class="outer-container" style="padding: 30px;">
+                    <table class="table table-borderless">
+                        <tr>
+                            <td style="width: 50%;">
+                                <h5>Nome do Paciente: <b>{{ $report->patient->name ?? 'Não Definido' }}</b></h5>
+                            </td>
+                            <td style="width: 50%; text-align: right;">
+                                <h5>Data da Realização do Exame: <b>{{ $report->created_at->format('d/m/Y') }}</b></h5>
+                            </td>
+                        </tr>
+                    </table>
 
                     <!-- Exames -->
-                    <p>
-                        @if ($report->body)
-                        @php
-                            $reportData = json_decode($report->body, true);
-                        @endphp
+                    @if ($report->body)
+                    @php
+                        $reportData = json_decode($report->body, true);
+                    @endphp
 
-                        @if (isset($reportData['sessions']))
-                            @foreach ($reportData['sessions'] as $session)
-                                <div class="session-container" style="margin-bottom: 40px;">
+                    @if (isset($reportData['sessions']))
+                        @foreach ($reportData['sessions'] as $session)
+                            @php
+                                $emptyValueCount = 0; 
+                                $examsPerSession = 0; 
+                            @endphp
+
+                            {{-- Primeiro, contar os exames na sessão --}}
+                            @foreach ($session['exams'] as $exam)
+                                @php
+                                    $examsPerSession++;
+                                    if (empty($exam['value']) || $exam['value'] == null) {
+                                        $emptyValueCount++; 
+                                    }
+                                @endphp
+                            @endforeach
+
+                            <div class="session-container" style="margin-bottom: 40px;">
+                                {{-- Exibe o título da sessão apenas se houver exames com valores válidos --}}
+                                @if ($examsPerSession > $emptyValueCount)
                                     <h3>{{ $session['sessionName'] }}</h3>
                                     <hr>
+                                @endif
 
-                                    <table style="width:90%; margin: 0 auto">
+                                <table style="width:90%; margin: 0 auto;">
+                                    {{-- Exibe o cabeçalho da tabela se houver exames válidos --}}
+                                    @if ($examsPerSession > $emptyValueCount)
                                         <thead>
                                             <tr>
                                                 <th scope="col" width="300px" height="50px">Exame</th>
@@ -74,28 +87,25 @@
                                                 <th scope="col" width="200px">Valor de referência</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            @if (isset($session['exams']))
-                                                @foreach ($session['exams'] as $exam)
-                                                    @if (!empty($exam['examName']))
-                                                        <tr>
-                                                            <td class="paragrafo"><h5>{{ $exam['examName'] }}</h5><hr></td>
-                                                            <td><h5><b>{{ $exam['value'] ?? 'Valor Não Definido' }}</b></h5></td>
-                                                            <td><h5>{{ $exam['referenceValue'] ?? 'Valor de Referência Não Definido' }}</h5></td>
-                                                        </tr>
-                                                    @endif
-                                                @endforeach
-                                            @else
+                                    @endif
+                                    <tbody>
+                                        {{-- Exibe os exames válidos --}}
+                                        @foreach ($session['exams'] as $exam)
+                                            @if (!empty($exam['examName']) && ($exam['value'] != '' && $exam['value'] != null))
                                                 <tr>
-                                                    <td colspan="3" class="text-center">Nenhum exame definido nesta sessão.</td>
+                                                    <td class="paragrafo"><h5>{{ $exam['examName'] }}</h5><hr></td>
+                                                    <td><h5><b>{{ $exam['value'] ?? 'Valor Não Definido' }}</b></h5></td>
+                                                    <td><h5>{{ $exam['referenceValue'] ?? 'Valor de Referência Não Definido' }}</h5></td>
                                                 </tr>
                                             @endif
-                                        </tbody>
-                                    </table>
-                                </div> 
-                            @endforeach
-                        @endif
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div> 
+                        @endforeach
                     @endif
+                @endif
+
 
                     <!-- Observações -->
                     @if ($report->soro_lipemico || $report->soro_hemolisado || $report->soro_icterico || $report->soro_outro)
@@ -123,16 +133,15 @@
                     @if ($report->conclusion)
                         <p></p>
                         <hr style="border-top: 2px dashed #CCC; border-bottom: 2px dashed #CCC; height: 2px; overflow: visible;">
-                        <h4>Conclusão:</h4>
+                        <h4>Observação:</h4>
                         <h5>{!! $report->conclusion !!}</h5>
                     @endif                        
                 </div>
-
             </div>
             
             <!-- Footer sempre fixo ao final da div -->
             <div class="card-footer text-center mt-auto">
-                <h5 class="col-md-12">Responsável Técnico {{ $report->signer->name }}, CRM </h5>
+                <!--<h5 class="col-md-12">Responsável Técnico {{ $report->signer->name }}, CRM </h5>-->
                 <h5 class="col-md-12">{{ $report->laboratory->name }} - NMT - UFPA</h5>
                 <h6 class="col-md-12">Belém - PA - @php
                     date_default_timezone_set('America/Sao_Paulo');
@@ -143,7 +152,7 @@
         </div>
 
         <!-- Botões para voltar e imprimir -->
-        <div class="d-print-none" style="margin-top: 20px">
+        <div class="d-print-none" style="margin-top: 20px;">
             <div class="row justify-content-center">
                 <div>
                     <button class="btn btn-outline-primary" id="returnButton" type="button">Voltar</button>
@@ -156,20 +165,77 @@
 @endsection
 
 <style>
-    .paragrafo {
-        display: flex;
-        align-items: center;
+    /* Definindo o background como pseudo-elemento com opacidade e ajustando tamanho */
+    .background-image::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url('{{ url('css/logo_ufpa.png') }}');
+        background-size: 50%; /* Ajuste o tamanho aqui, por exemplo, 50% */
+        background-repeat: no-repeat;
+        background-position: center;
+        opacity: 0.1;
+        z-index: 1;
     }
 
-    .paragrafo hr {
-        flex: 1;
-        margin: 0px 10px;
-        border-top: 2px dashed #CCC;
-        height: 1px;
-        overflow: visible;
+    /* Forçar impressão da imagem de fundo */
+    @media print {
+        .background-image::before {
+            opacity: 0.1;
+            background-size: 50%; /* Ajuste o tamanho também na impressão */
+        }
+
+        body {
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
     }
+
 
     .session-container {
         margin-bottom: 40px;
     }
+    table {
+    width: 90%;
+    margin: 0 auto;
+    border-collapse: collapse;
+}
+
+td, th {
+    vertical-align: top; /* Alinha o conteúdo ao topo */
+    padding: 10px;
+    text-align: left;
+}
+
+td h5 {
+    margin: 0;
+    padding: 0;
+    white-space: normal; /* Permite a quebra de linha */
+}
+
+td {
+    word-wrap: break-word; /* Garante a quebra de linha para textos longos */
+}
+
+.paragrafo {
+    display: flex;
+    align-items: center;
+}
+
+.paragrafo h5 {
+    margin-bottom: 5px; /* Ajusta o espaçamento abaixo do texto */
+}
+
+.paragrafo hr {
+    flex: 1;
+    margin: 0px 10px;
+    border-top: 2px dashed #CCC;
+    height: 1px;
+    overflow: visible;
+}
+
+
 </style>

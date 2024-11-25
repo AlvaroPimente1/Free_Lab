@@ -13,7 +13,6 @@
 
                     <div class="d-flex justify-content-center mb-4">
                         <a href="{{ route('procedures.create', ['lab_id' => $lab_id, 'text' => 0]) }}" class="btn btn-primary mr-2">Criar novo modelo</a>
-                        <!-- <a href="{{ route('procedures.inactives', ['lab_id' => $lab_id]) }}" class="btn btn-secondary">Ver Procedimentos Inativos</a> Botão para inativos -->
                     </div>
 
                     <div class="table-responsive-md">
@@ -29,12 +28,15 @@
                             <tbody>
                             @foreach ($procedures as $procedure)
                                 <tr>
-                                    <td>{{ $procedure->id}}</td>
-                                    <td>{{ $procedure->name}}</td>
-                                    <td>{{ $procedure->mnemonic}}</td>
+                                    <td>{{ $procedure->id }}</td>
+                                    <td>{{ $procedure->name }}</td>
+                                    <td>{{ $procedure->mnemonic }}</td>
                                     <td class="d-flex justify-content-center">
-                                        <a href="{{ route('procedures.edit', ['lab_id' => $lab_id, 'procedure' => $procedure]) }}" class="btn btn-success mx-2"><b>VISUALIZAR</b></a>
-                                        <button type="button" class="btn btn-danger mx-2" onclick="inactivateProcedure({{ $procedure->id }})">EXCLUIR</button>
+                                        <!-- Botão VISUALIZAR -->
+                                        <a href="{{ route('procedures.edit', ['lab_id' => $lab_id, 'procedure' => $procedure]) }}" class="btn btn-success mx-2"><b>EDITAR</b></a>
+                                        
+                                        <!-- Botão EXCLUIR com modal -->
+                                        <button type="button" class="btn btn-danger mx-2" onclick="openModal({{ $procedure->id }})">EXCLUIR</button>
                                     </td>
                                 </tr>
                             @endforeach
@@ -46,34 +48,63 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal de Confirmação de Exclusão -->
+    <div id="deleteModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <h5>Tem certeza que deseja excluir este procedimento?</h5>
+            <form id="deleteForm" method="POST" style="display:inline;">
+                @csrf
+                @method('PUT') <!-- Ou DELETE, dependendo de como configurou a rota -->
+                <button type="submit" class="btn btn-danger">Confirmar Exclusão</button>
+                <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancelar</button>
+            </form>
+        </div>
+    </div>
+
 </div>
 @endsection
 
-{{-- Adiciona a função JavaScript no final --}}
 @section('scripts')
 <script type="text/javascript">
-    function inactivateProcedure(procedureId) {
-        if (confirm('Tem certeza que deseja inativar este procedimento?')) {
-            // Se o usuário confirmar, envia a requisição AJAX
-            fetch(`/procedures/${procedureId}/inactivate`, {
-                method: 'PUT',
-                headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                    'Content-Type': 'application/json',
-                },
-            })
-            .then(response => {
-                if (response.ok) {
-                    alert('Procedimento inativado com sucesso!');
-                    location.reload(); // Recarrega a página
-                } else {
-                    alert('Ocorreu um erro ao tentar inativar o procedimento.');
-                }
-            })
-            .catch(error => {
-                alert('Ocorreu um erro: ' + error);
-            });
-        }
+    // Função para abrir o modal
+    function openModal(procedureId) {
+        const modal = document.getElementById('deleteModal');
+        const form = document.getElementById('deleteForm');
+
+        // Altera a ação do formulário para o procedimento correto
+        form.action = `/procedures/${procedureId}/inactivate`;
+        
+        // Exibe o modal
+        modal.style.display = 'block';
+    }
+
+    // Função para fechar o modal
+    function closeModal() {
+        const modal = document.getElementById('deleteModal');
+        modal.style.display = 'none';
     }
 </script>
+
+<!-- CSS simples para estilizar o modal -->
+<style>
+    .modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .modal-content {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 5px;
+        text-align: center;
+    }
+</style>
 @endsection

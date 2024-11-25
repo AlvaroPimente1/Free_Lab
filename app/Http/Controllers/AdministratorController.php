@@ -123,7 +123,9 @@ class AdministratorController extends Controller
         //Obtém os dados de todos os usuários
         $users = $user->all();
         //Obtém os dados de todos os laudos
-        $reports = $laboratory->reports->all();
+        $reports = Report::where('laboratory_id', $laboratory->id)
+        ->orderBy('id', 'asc')
+        ->get();
         //Obtém os dados de todos os pacientes
         $patients = $laboratory->patients->all();
         //Retorna a página principal de administrador do lab juntamente com os dados obtidos

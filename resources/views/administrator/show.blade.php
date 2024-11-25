@@ -22,37 +22,38 @@
                     </div>
 
                     @isset($reports)
-                        <table id="" class="display" style="width:100%">
-                            <thead>
+                    <table id="reportsTable" class="display" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th scope="col" width="80px">Requisição</th>
+                                <th scope="col" width="100px">Tipo de Exame</th>
+                                <th scope="col">Requisitante</th>
+                                <th scope="col">Executante</th>
+                                <th scope="col">Paciente</th>
+                                <th scope="col" width="100px"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($reports as $report)
                                 <tr>
-                                    <th scope="col" width="80px">Requisição</th>
-                                    <th scope="col" width="100px">Tipo de Exame</th>
-                                    <th scope="col">Requisitante</th>
-                                    <th scope="col">Executante</th>
-                                    <th scope="col">Paciente</th>
-                                    <th scope="col" width="100px"></th>
+                                    <td>{{ $report->id }}</td>
+                                    <td>{{ $report->procedure->mnemonic }}</td>
+                                    <td>{{ $report->requester }}</td>
+                                    <td>{{ $report->signer->name }}</td>
+                                    <td>{{ $report->patient->name }}</td>
+                                    <td>
+                                        <a href="{{ route('reportShow', $report->id) }}" class="badge badge-warning">Visualizar</a>
+                                    </td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($reports as $report)
-                                    <tr>
-                                        <td>{{ $report->id }}</td>
-                                        <td>{{ $report->procedure->mnemonic }}</td>
-                                        <td>{{ $report->requester }}</td>
-                                        <td>{{ $report->signer->name }}</td>
-                                        <td>{{ $report->patient->name }}</td>
-                                        <td>
-                                            <a href="{{ route('reportShow', $report->id) }}" class="badge badge-warning">Visualizar</a>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    @else
-                        <div class="alert alert-primary" role="alert">
-                            Não existem ainda laudos expedidos por este laboratório
-                        </div>
-                    @endisset
+                            @endforeach
+                        </tbody>
+                    </table>
+                @else
+                    <div class="alert alert-primary" role="alert">
+                        Não existem ainda laudos expedidos por este laboratório
+                    </div>
+                @endisset
+
                 </div>
             </div>
 
@@ -145,3 +146,4 @@
     </div>
 </div>
 @endsection
+

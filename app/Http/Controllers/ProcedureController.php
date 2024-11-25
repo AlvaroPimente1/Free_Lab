@@ -52,14 +52,14 @@ class ProcedureController extends Controller
     public function inactivate($id)
     {
         $procedure = Procedure::findOrFail($id);
-
+    
         // Altera o status para inativo
         $procedure->status = 0;
         $procedure->save();
-
-        // Retorna uma resposta simples, sem redirecionar
-        return response()->json(['success' => 'Procedimento inativado com sucesso!']);
-    }
+    
+        // Redireciona de volta para a página anterior
+        return redirect()->back()->with('success', 'Procedimento inativado com sucesso!');
+    }    
 
     public function activate($id)
     {
@@ -137,74 +137,69 @@ class ProcedureController extends Controller
      */
     public function edit(Procedure $procedure, Request $request)
     {
-        $user = auth()->user()->id;
-        $user = User::find($user);
+        $fields = [];
+        $fieldCount = 0;
     
-        // Decodificar o JSON armazenado em fields
         if ($procedure->fields) {
-            $decodedFields = json_decode($procedure->fields, true); // Decodifica o JSON em um array associativo
-    
-            // Inicializa as variáveis
-            $fields = [];
-            $fieldCount = 0;
-    
-            // Verifica se existem sessões e exames
-            if (isset($decodedFields['sessions']) && is_array($decodedFields['sessions'])) {
+            $decodedFields = json_decode($procedure->fields, true);
+            if (isset($decodedFields['sessions'])) {
                 foreach ($decodedFields['sessions'] as $session) {
                     $sessionData = [
-                        'sessionName' => $session['sessionName'] ?? 'Sessão Sem Nome',
-                        'exams' => []
+                        'sessionName' => $session['sessionName'] ?? '',
+                        'exams' => $session['exams'] ?? [],
                     ];
-    
-                    if (isset($session['exams']) && is_array($session['exams'])) {
-                        foreach ($session['exams'] as $exam) {
-                            $sessionData['exams'][] = [
-                                'examName' => $exam['examName'] ?? 'Nome do Exame Não Definido',
-                                'referenceValue' => $exam['referenceValue'] ?? 'Valor de Referência Não Definido'
-                            ];
-                            $fieldCount++;
-                        }
-                    }
                     $fields[] = $sessionData;
+                    $fieldCount += count($sessionData['exams']);
                 }
             }
-        } else {
-            $fields = [];
-            $fieldCount = 0;
         }
     
         return view('procedures.edit', [
             'procedure' => $procedure,
-            'fields' => $fields, // Array de campos com nomes de exames e valores de referência organizados por sessão
+            'fields' => $fields,
             'fieldCount' => $fieldCount,
-            'lab_id' => $request->lab_id,
         ]);
     }
     
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Procedure  $procedure
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, Procedure $procedure)
     {
-        $procedure->update($this->validateProcedure());
-        $laboratory = Laboratory::findOrFail($request->lab_id);
-
-        // Atualiza o JSON no campo fields
-        $procedure->fields = $request->input('fields');
-
-        $procedure->save();
-
-        return view('procedures.index', [
-            'procedures' => $laboratory->procedures,
-            'lab_id' => $laboratory->id,
-            'laboratory' => $laboratory
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'mnemonic' => 'nullable|string|max:255',
+            'sessions' => 'nullable|array',
+            'sessions.*.sessionName' => 'nullable|string|max:255',
+            'sessions.*.exams' => 'nullable|array',
+            'sessions.*.exams.*.examName' => 'nullable|string|max:255',
+            'sessions.*.exams.*.referenceValue' => 'nullable|string|max:255',
+            'soro_lipemico' => 'nullable|boolean',
+            'soro_icterico' => 'nullable|boolean',
+            'soro_hemolisado' => 'nullable|boolean',
+            'soro_outro' => 'nullable|string|max:50',
+            'method' => 'required', 
+            'material' => 'required', 
         ]);
-    }
+        
+        $fields = [
+            'sessions' => $validated['sessions'] ?? [],
+        ];
+        
+        $procedure->update([
+            'name' => $validated['name'],
+            'mnemonic' => $validated['mnemonic'],
+            'fields' => json_encode($fields),
+            'soro_lipemico' => $validated['soro_lipemico'] ?? 0,
+            'soro_icterico' => $validated['soro_icterico'] ?? 0,
+            'soro_hemolisado' => $validated['soro_hemolisado'] ?? 0,
+            'soro_outro' => $validated['soro_outro'] ?? '',
+            'method' => $validated['method'], 
+            'material' => $validated['material'], 
+        ]);
+    
+        return redirect()->route('procedures.index', ['lab_id' => $procedure->laboratory_id])
+            ->with('success', 'Procedimento atualizado com sucesso!');
+
+    }    
+    
 
     /**
      * Remove the specified resource from storage.

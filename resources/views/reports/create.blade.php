@@ -184,29 +184,39 @@
         // Itera sobre cada sessão
         $('.card-body').find('h3').each(function() {
             let sessionName = $(this).text().trim();
+            
+            // Reinicia o array de exames a cada nova sessão
             let exams = [];
+            let currentSession = $(this).nextUntil('h3', '.row.g-3.mb-2'); // Pega apenas as linhas de exame entre as sessões
 
             // Itera sobre os exames dentro da sessão
-            $(this).next('hr').nextAll('.row.g-3.mb-2').each(function() {
-                let examName = $(this).find('input.form-control[readonly]').val(); // Nome do exame
+            currentSession.each(function() {
+                let examName = $(this).find('input[name^="exam_"]').val(); // Captura o nome do exame
                 let fieldValue = $(this).find('input[type="text"]').val(); // Valor do exame (preenchido pelo usuário)
                 let referenceValue = $(this).find('input.form-control').last().val(); // Valor de referência
 
-                exams.push({
-                    examName: examName,
-                    value: fieldValue,
-                    referenceValue: referenceValue
-                });
+                // Apenas adiciona o exame se examName não for vazio ou nulo
+                if (examName) {
+                    exams.push({
+                        examName: examName,
+                        value: fieldValue,
+                        referenceValue: referenceValue
+                    });
+                }
             });
 
-            jsonStructure.sessions.push({
-                sessionName: sessionName,
-                exams: exams
-            });
+            // Apenas adiciona a sessão se houver exames
+            if (exams.length > 0) {
+                jsonStructure.sessions.push({
+                    sessionName: sessionName,
+                    exams: exams
+                });
+            }
         });
 
         // Atualiza o campo body com o JSON criado
         $('#body').val(JSON.stringify(jsonStructure));
     }
 </script>
+
 @endsection
